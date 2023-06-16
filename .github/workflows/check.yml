@@ -1,0 +1,24 @@
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  tfsec:
+    name: tfsec
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: tfsec
+        uses: reviewdog/action-tfsec@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          working_directory: ${{ env.TARGET_DIR }}
+          level: info
+          reporter: github-pr-review
+          filter_mode: nofilter
+          flags: -tee
+          tfsec_flags: ""
